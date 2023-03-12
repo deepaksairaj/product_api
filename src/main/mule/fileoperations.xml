@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="85a1c792-cd7e-42b2-86c7-d88ae84b4ab6" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="fileoperationsFlow" doc:id="537681d7-3312-499e-8cc0-7c3feccc6332" >
+		<http:listener doc:name="Listener" doc:id="2a111e14-9a3a-45a2-8924-6e4e5311574c" config-ref="HTTP_Listener_config" path="/fileread"/>
+		<logger level="INFO" doc:name="Logger" doc:id="984e6683-d674-45f0-9c54-d6cb9677c83a" message="---start flow----"/>
+		<file:read doc:name="Read" doc:id="504f4fcb-7b97-4054-ae09-fa96f1cf68f9" path="C:\Users\gdeepak\OneDrive - UAB - The University of Alabama at Birmingham\Documents\DB asst 5.txt"/>
+		<ee:transform doc:name="Transform Message" doc:id="7ac131ba-9386-43d5-b994-38cbf4e40b5f">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"msg": payload,
+	"status": "operation success"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
